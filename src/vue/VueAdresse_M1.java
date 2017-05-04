@@ -4,8 +4,11 @@
  */
 package vue;
 
+import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import modele.dao.DaoAdresse;
@@ -13,8 +16,7 @@ import modele.dao.Jdbc;
 import modele.metier.Adresse;
 
 /**
- * Version sans gestion de la touche ESCAPE dans le champ de saisie de l'Id
- * événement ActionPerformed sur jTextFieldId
+ * Version avec gestion de la touche ESCAPE dans le champ de saisie de l'Id
  * @author btssio
  */
 public class VueAdresse_M1 extends javax.swing.JFrame {
@@ -42,7 +44,7 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         jButtonValider.addActionListener(ecouteur);
         jButtonAnnuler.addActionListener(ecouteur);
         jButtonQuitter.addActionListener(ecouteur);
-        jTextFieldId.addActionListener(ecouteur);
+        jTextFieldId.addKeyListener(ecouteur);
 
 
         // création du singleton Jdbc
@@ -577,9 +579,11 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
 
     /**
      * classe privée Ecouteur d'événements, implémentant les méthodes de
-     * l'interface ActionListener, ie la méthode actionPerformed 
+     * l'interface ActionListener, ie la méthode actionPerformed et els méthodes
+     * de l'interface KeyListener, ie les méthodes keyTyped, keyPressed et
+     * keyReleased
      */
-    private class Ecouteur implements ActionListener {
+    private class Ecouteur implements ActionListener, KeyListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -625,12 +629,26 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
                 }
             } else if (e.getSource() == jButtonQuitter) {
                 System.exit(0);
-            } else if (e.getSource() == jTextFieldId) {
-                        if (etat != 2) {
-                recherche();
-                        }
             }
 
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+                        if (e.getKeyChar() == Event.ENTER && etat != 2) {
+                recherche();
+            } else if (e.getKeyCode() == Event.ESCAPE) {
+                jButtonAnnuler.doClick();
+            }
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
