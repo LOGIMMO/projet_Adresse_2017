@@ -10,20 +10,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 import modele.dao.DaoAdresse;
 import modele.dao.Jdbc;
 import modele.metier.Adresse;
 
 /**
- * Version avec gestion de la touche ESCAPE dans le champ de saisie de l'Id
+ *
  * @author btssio
  */
-public class VueAdresse_M1 extends javax.swing.JFrame {
+public class VueAdresse_M2 extends javax.swing.JFrame {
 
     private int etat; // 1 affichage, 2 ajout, 3 suppression, 4 modification, 
     // 5 recherche, possibilité d'utiliser enum
 
+    private List<Adresse> lesAdresses;
+    private int indiceAdresseCourante;
     private Adresse adresseCourante;    // l'adresse courante
 
     private Ecouteur ecouteur;          // l'écouteur d'événements
@@ -31,7 +34,7 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
     /**
      * Creates new form VueAdresse
      */
-    public VueAdresse_M1() {
+    public VueAdresse_M2() {
         // initialisation des composants grahiques de l'interface
         initComponents();
         // instanciation d'un listener
@@ -45,13 +48,24 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         jButtonAnnuler.addActionListener(ecouteur);
         jButtonQuitter.addActionListener(ecouteur);
         jTextFieldId.addKeyListener(ecouteur);
-
+        jButtonPrecedent.addActionListener(ecouteur);
+        jButtonSuivant.addActionListener(ecouteur);
 
         // création du singleton Jdbc
         Jdbc.creer("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:", "@localhost:1521:XE", "", "btssio", "btssio");
 
+        try {
+            // initialisation de la liste des adresses
+            Jdbc.getInstance().connecter();
+            lesAdresses = DaoAdresse.selectAll();
+            afficherPremiereAdresse();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Pilote BDD absent");
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "Problème avec la Base de données");
+        }
+
         // affichage de la première adresse
-        afficherPremiereAdresse();
     }
 
     /**
@@ -72,6 +86,8 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         jButtonRechercher.setEnabled(true);
         jButtonAnnuler.setEnabled(false);
         jButtonValider.setEnabled(false);
+                jButtonPrecedent.setEnabled(true);
+        jButtonSuivant.setEnabled(true);
     }
 
     /**
@@ -92,6 +108,8 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         jButtonRechercher.setEnabled(false);
         jButtonAnnuler.setEnabled(true);
         jButtonValider.setEnabled(true);
+        jButtonPrecedent.setEnabled(false);
+        jButtonSuivant.setEnabled(false);
     }
 
     /**
@@ -112,6 +130,8 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         jButtonRechercher.setEnabled(false);
         jButtonAnnuler.setEnabled(false);
         jButtonValider.setEnabled(false);
+        jButtonPrecedent.setEnabled(false);
+        jButtonSuivant.setEnabled(false);
     }
 
     /**
@@ -132,6 +152,8 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         jButtonRechercher.setEnabled(false);
         jButtonAnnuler.setEnabled(true);
         jButtonValider.setEnabled(true);
+        jButtonPrecedent.setEnabled(false);
+        jButtonSuivant.setEnabled(false);
     }
 
     /**
@@ -152,6 +174,8 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         jButtonRechercher.setEnabled(false);
         jButtonAnnuler.setEnabled(true);
         jButtonValider.setEnabled(true);
+        jButtonPrecedent.setEnabled(false);
+        jButtonSuivant.setEnabled(false);
     }
 
     /**
@@ -175,19 +199,6 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         this.jTextFieldCdp.setText("");
         this.jTextFieldVille.setText("");
     }
-    
-    public void afficherPremiereAdresse() {
-        try {
-            Jdbc.getInstance().connecter();
-            adresseCourante = DaoAdresse.selectFirst();
-            afficherAdresse(adresseCourante);
-        } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Pilote absent");
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Echec de connexion");
-        }
-        modeAffichage();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -198,6 +209,7 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanelTitre = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jTextFieldId = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -214,11 +226,23 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         jButtonSupprimer = new javax.swing.JButton();
         jButtonRechercher = new javax.swing.JButton();
         jButtonModifier = new javax.swing.JButton();
+        jButtonSuivant = new javax.swing.JButton();
+        jButtonPrecedent = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Gestion des adresses Mission 1");
         setResizable(false);
+
+        javax.swing.GroupLayout jPanelTitreLayout = new javax.swing.GroupLayout(jPanelTitre);
+        jPanelTitre.setLayout(jPanelTitreLayout);
+        jPanelTitreLayout.setHorizontalGroup(
+            jPanelTitreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 136, Short.MAX_VALUE)
+        );
+        jPanelTitreLayout.setVerticalGroup(
+            jPanelTitreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 99, Short.MAX_VALUE)
+        );
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Id : ");
@@ -252,39 +276,56 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
 
         jButtonModifier.setText("Modifier");
 
+        jButtonSuivant.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vue/images/fleche_droite.png"))); // NOI18N
+
+        jButtonPrecedent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vue/images/fleche_gauche.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanelActionsLayout = new javax.swing.GroupLayout(jPanelActions);
         jPanelActions.setLayout(jPanelActionsLayout);
         jPanelActionsLayout.setHorizontalGroup(
             jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelActionsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jButtonPrecedent, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
+                .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanelActionsLayout.createSequentialGroup()
                         .addComponent(jButtonAjouter)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonSupprimer))
                     .addComponent(jButtonAnnuler))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonModifier)
-                    .addComponent(jButtonValider, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addComponent(jButtonRechercher)
-                .addContainerGap())
+                    .addGroup(jPanelActionsLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonValider, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))
+                    .addGroup(jPanelActionsLayout.createSequentialGroup()
+                        .addComponent(jButtonModifier)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonRechercher)))
+                .addComponent(jButtonSuivant, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
         );
         jPanelActionsLayout.setVerticalGroup(
             jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelActionsLayout.createSequentialGroup()
-                .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAjouter)
-                    .addComponent(jButtonSupprimer)
-                    .addComponent(jButtonModifier)
-                    .addComponent(jButtonRechercher))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonSuivant, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanelActionsLayout.createSequentialGroup()
+                        .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonPrecedent, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButtonAjouter)
+                                .addComponent(jButtonSupprimer)
+                                .addComponent(jButtonModifier)
+                                .addComponent(jButtonRechercher)))
+                        .addGap(0, 1, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAnnuler)
                     .addComponent(jButtonValider))
-                .addGap(0, 9, Short.MAX_VALUE))
+                .addGap(0, 16, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
@@ -298,47 +339,52 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel3))
-                            .addComponent(jLabel5)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jTextFieldVille, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-                    .addComponent(jTextFieldCdp, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldRue, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldId, javax.swing.GroupLayout.Alignment.LEADING))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 41, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanelActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonQuitter))
-                        .addGap(41, 41, 41))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel3))
+                                    .addComponent(jLabel5)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel4)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jTextFieldVille, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                            .addComponent(jTextFieldCdp, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldRue, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldId, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(88, 88, 88))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(214, 214, 214))))
+                        .addGap(27, 27, 27)))
+                .addComponent(jPanelTitre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(154, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 53, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanelActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonQuitter))
+                .addGap(41, 41, 41))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextFieldRue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jTextFieldRue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanelTitre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldCdp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -347,11 +393,11 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jTextFieldVille, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                .addGap(30, 30, 30)
                 .addComponent(jPanelActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonQuitter)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
@@ -366,23 +412,16 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         Adresse cetteAdresse = null;
         if (!jTextFieldId.getText().equals("")) {
             try {
-                int idAdresse = Integer.valueOf(jTextFieldId.getText());
-                try {
-                    Jdbc.getInstance().connecter();
-                    cetteAdresse = DaoAdresse.selectOne(idAdresse);
-                    if (cetteAdresse != null) {
-                        adresseCourante = cetteAdresse;
-                        afficherAdresse(adresseCourante);
-                        modeAffichage();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Identifiant inconnu");
-                        jTextFieldId.selectAll();
-                    }
-                } catch (ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(this, "Pilote BDD absent");
-                    System.exit(0);
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(this, "Problème avec la Base de données");
+            int idAdresse = Integer.valueOf(jTextFieldId.getText());
+            int indice = lesAdresses.indexOf(new Adresse(idAdresse, null, null, null));
+                if (indice != -1) {
+                    indiceAdresseCourante = indice;
+                    adresseCourante = lesAdresses.get(indiceAdresseCourante);
+                    afficherAdresse(adresseCourante);
+                    modeAffichage();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Identifiant inconnu");
+                    jTextFieldId.selectAll();
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "il faut saisir un entier");
@@ -432,15 +471,14 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
                 Adresse cetteAdresse;
                 try {
                     Jdbc.getInstance().connecter();
-                    // on vérifie q'une adresse de même id n'existe pas dans la BDD
-                    cetteAdresse = DaoAdresse.selectOne(idAdresse);
-                    // l'adresse a été ajoutée à la BDD, elle devient l'adresse courante
-                    // et on l'affiche
-                    if (cetteAdresse == null) {
+                    boolean present = lesAdresses.contains(new Adresse(idAdresse, null, null, null));
+                    if (!present) {
                         cetteAdresse = new Adresse(idAdresse, jTextFieldRue.getText(), jTextFieldCdp.getText(), jTextFieldVille.getText());
                         DaoAdresse.insert(idAdresse, cetteAdresse);
                         adresseCourante = cetteAdresse;
                         afficherAdresse(adresseCourante);
+                        lesAdresses = DaoAdresse.selectAll();
+                        indiceAdresseCourante = lesAdresses.indexOf(adresseCourante);
                         JOptionPane.showMessageDialog(this, "Ajout effectué");
                     } else {
                         erreurSaisie = true;
@@ -482,34 +520,43 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         int idAdresse = Integer.valueOf(jTextFieldId.getText());
         if (!jTextFieldId.getText().equals("")) {
             Adresse cetteAdresse;
-            try {
-                Jdbc.getInstance().connecter();
-                cetteAdresse = DaoAdresse.selectOne(idAdresse);
-                if (cetteAdresse != null) {
-                    int rep = JOptionPane.showConfirmDialog(this, "Etes-vous sûr(e) de vouloir supprimer l'adresse d'id " + idAdresse + " ?", "Suppression", JOptionPane.YES_NO_OPTION);
-                    if (rep == JOptionPane.YES_OPTION) {
+
+            int indice = lesAdresses.indexOf(new Adresse(idAdresse, null, null, null));
+            cetteAdresse = lesAdresses.get(indice);
+            if (cetteAdresse != null) {
+                int rep = JOptionPane.showConfirmDialog(this, "Etes-vous sûr(e) ?", "Suppression", JOptionPane.YES_NO_OPTION);
+                if (rep == JOptionPane.YES_OPTION) {
+                    try {
+                        Jdbc.getInstance().connecter();
                         DaoAdresse.delete(idAdresse);
                         effacerAdresse();
                         JOptionPane.showMessageDialog(this, "Suppression effectuée");
-                        adresseCourante = DaoAdresse.selectFirst();
-                        afficherAdresse(adresseCourante);
+                        lesAdresses = DaoAdresse.selectAll();
+                        afficherPremiereAdresse();
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(this, "Echec de la suppression dans la BDD");
+                    } catch (ClassNotFoundException ex) {
+                        JOptionPane.showMessageDialog(this, "Pilote absent");
+                        System.exit(0);
                     }
-                } else {
-                    effacerAdresse();
-                    JOptionPane.showMessageDialog(this, "Identifiant inconnu");
                 }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Echec de la suppression dans la BDD");
-            } catch (ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(this, "Pilote absent");
-                System.exit(0);
+            } else {
+                effacerAdresse();
+                JOptionPane.showMessageDialog(this, "Identifiant inconnu");
             }
+
         } else {
             JOptionPane.showMessageDialog(this, "Le champ Id est vide");
         }
         modeAffichage();
     }
 
+    public void afficherPremiereAdresse() {
+        indiceAdresseCourante = 0;
+        adresseCourante = lesAdresses.get(indiceAdresseCourante);
+        afficherAdresse(adresseCourante);
+        modeAffichage();
+    }
 
     /**
      * @param args the command line arguments
@@ -528,51 +575,22 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+ 
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VueAdresse_M1().setVisible(true);
+                new VueAdresse_M2().setVisible(true);
             }
         });
     }
@@ -629,6 +647,18 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
                 }
             } else if (e.getSource() == jButtonQuitter) {
                 System.exit(0);
+            } else if (e.getSource() == jButtonPrecedent) {
+                if (indiceAdresseCourante > 0) {
+                    indiceAdresseCourante--;
+                    adresseCourante = lesAdresses.get(indiceAdresseCourante);;
+                    afficherAdresse(adresseCourante);
+                }
+            } else if (e.getSource() == jButtonSuivant) {
+                if (indiceAdresseCourante < lesAdresses.size() - 1) {
+                    indiceAdresseCourante++;
+                    adresseCourante = lesAdresses.get(indiceAdresseCourante);;
+                    afficherAdresse(adresseCourante);
+                }
             }
 
         }
@@ -639,24 +669,25 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
-
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-                        if (e.getKeyChar() == Event.ENTER && etat != 2) {
+            if (e.getKeyChar() == Event.ENTER && etat != 2) {
                 recherche();
             } else if (e.getKeyCode() == Event.ESCAPE) {
                 jButtonAnnuler.doClick();
             }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAjouter;
     private javax.swing.JButton jButtonAnnuler;
     private javax.swing.JButton jButtonModifier;
+    private javax.swing.JButton jButtonPrecedent;
     private javax.swing.JButton jButtonQuitter;
     private javax.swing.JButton jButtonRechercher;
+    private javax.swing.JButton jButtonSuivant;
     private javax.swing.JButton jButtonSupprimer;
     private javax.swing.JButton jButtonValider;
     private javax.swing.JLabel jLabel1;
@@ -665,6 +696,7 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanelActions;
+    private javax.swing.JPanel jPanelTitre;
     private javax.swing.JTextField jTextFieldCdp;
     private javax.swing.JTextField jTextFieldId;
     private javax.swing.JTextField jTextFieldRue;
