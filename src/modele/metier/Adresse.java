@@ -55,14 +55,14 @@ public class Adresse {
         this.cp = cp;
         this.ville = ville;
     }
-
+  
     /**
      *
      * @return String attributs de l'adresse
      */
     @Override
     public String toString() {
-        return ("Adresse{rue: " + this.getRue() + "\tcp: " + this.getCp() + "\tville: " + this.getVille()) + "}";
+        return "Adresse{" + "id=" + id + ", rue=" + rue + ", cp=" + cp + ", ville=" + ville + '}';
     }
 
     /**
