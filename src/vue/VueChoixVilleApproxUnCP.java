@@ -31,7 +31,7 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
     public VueChoixVilleApproxUnCP(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-         // instanciation d'un listener
+        // instanciation d'un listener
         ecouteur = new Ecouteur();
         // ajout du listener au différents contrôles écoutés
         jComboBoxVille.addActionListener(ecouteur);
@@ -134,10 +134,6 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
 
     private void initialisationComboVilles() {
         String unCp = jTextFieldCP.getText().trim();
-//        int longueurCp = unCp.length();
-//        if (longueurCp < 5) {
-//            unCp += '%';
-//        }
         Jdbc.creer("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:", "@localhost:1521:XE", "", "btssio", "btssio");
 
         try {
@@ -146,8 +142,13 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
             List<Ville> lesVilles = DaoVille.selectAllByCpApprox(unCp, 2, 1);
             for (Ville ville : lesVilles) {
                 jComboBoxModelVille.addElement(ville);
+
             }
             jComboBoxVille.setModel(jComboBoxModelVille);
+            // s'il y a au moins une ville, on initialise le CP avec la première ville
+            if (jComboBoxModelVille.getSize() > 0) {
+                jTextFieldCPChoisi.setText(((Ville) jComboBoxModelVille.getElementAt(0)).getCp());
+            }
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Pilote absent");
         } catch (SQLException ex) {
@@ -181,22 +182,6 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(VueChoixVilleApproxUnCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -235,7 +220,7 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyChar() == Event.ENTER) {
-                if (jTextFieldCP.getText() != "") {
+                if (!jTextFieldCP.getText().equals("")) {
                     initialisationComboVilles();
                 }
             }
@@ -245,7 +230,7 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
         public void keyReleased(KeyEvent e) {
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonValider;
     private javax.swing.JComboBox jComboBoxVille;
