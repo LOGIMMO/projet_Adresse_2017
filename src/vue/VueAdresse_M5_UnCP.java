@@ -103,6 +103,7 @@ public class VueAdresse_M5_UnCP extends javax.swing.JFrame {
         jButtonValider.setEnabled(false);
         jButtonPrecedent.setEnabled(true);
         jButtonSuivant.setEnabled(true);
+        jButtonChoisirVille.setEnabled(false);
     }
 
     /**
@@ -603,6 +604,7 @@ public class VueAdresse_M5_UnCP extends javax.swing.JFrame {
     public void afficherPremiereAdresse() {
         indiceAdresseCourante = 0;
         adresseCourante = lesAdresses.get(indiceAdresseCourante);
+        villeCourante = adresseCourante.getVille();
         afficherAdresse(adresseCourante);
         modeAffichage();
     }
