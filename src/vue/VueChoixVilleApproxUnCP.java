@@ -32,10 +32,11 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         // instanciation d'un listener
-        ecouteur = new Ecouteur();
+        ecouteur = new Ecouteur(this);
         // ajout du listener au différents contrôles écoutés
         jComboBoxVille.addActionListener(ecouteur);
         jTextFieldCP.addKeyListener(ecouteur);
+        jButtonValider.addActionListener(ecouteur);
     }
 
     /**
@@ -56,10 +57,12 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
         jTextFieldCP = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jTextFieldCPChoisi = new javax.swing.JTextField();
+        jButtonAnnuler = new javax.swing.JButton();
 
         jLabel4.setText("jLabel4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setModal(true);
 
         jLabel1.setText("Choix d'une ville");
 
@@ -77,14 +80,17 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
 
         jTextFieldCPChoisi.setEnabled(false);
 
+        jButtonAnnuler.setText("Annuler");
+        jButtonAnnuler.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAnnulerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonValider)
-                .addGap(37, 37, 37))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -92,19 +98,27 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextFieldCPChoisi, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(89, 89, 89)
+                        .addComponent(jButtonAnnuler)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addComponent(jButtonValider)
+                        .addGap(74, 74, 74))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBoxVille, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldCP, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(37, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextFieldCPChoisi, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2))
+                                .addGap(12, 12, 12)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBoxVille, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldCP, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,7 +138,9 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
                     .addComponent(jLabel5)
                     .addComponent(jTextFieldCPChoisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addComponent(jButtonValider)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonValider)
+                    .addComponent(jButtonAnnuler))
                 .addGap(23, 23, 23))
         );
 
@@ -132,8 +148,16 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonAnnulerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnnulerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonAnnulerActionPerformed
+
     private void initialisationComboVilles() {
         String unCp = jTextFieldCP.getText().trim();
+//        int longueurCp = unCp.length();
+//        if (longueurCp < 5) {
+//            unCp += '%';
+//        }
         Jdbc.creer("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:", "@localhost:1521:XE", "", "btssio", "btssio");
 
         try {
@@ -142,13 +166,8 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
             List<Ville> lesVilles = DaoVille.selectAllByCpApprox(unCp, 2, 1);
             for (Ville ville : lesVilles) {
                 jComboBoxModelVille.addElement(ville);
-
             }
             jComboBoxVille.setModel(jComboBoxModelVille);
-            // s'il y a au moins une ville, on initialise le CP avec la première ville
-            if (jComboBoxModelVille.getSize() > 0) {
-                jTextFieldCPChoisi.setText(((Ville) jComboBoxModelVille.getElementAt(0)).getCp());
-            }
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Pilote absent");
         } catch (SQLException ex) {
@@ -182,6 +201,22 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(VueChoixVilleApproxUnCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -206,10 +241,20 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
      */
     private class Ecouteur implements ActionListener, KeyListener {
 
+        private VueChoixVilleApproxUnCP vue;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == jComboBoxVille) {
                 jTextFieldCPChoisi.setText(((Ville) jComboBoxVille.getSelectedItem()).getCp());
+            } else if (e.getSource() == jButtonValider) {
+                if (jTextFieldCPChoisi.getText() != "") {
+                    Ville ville = (Ville) jComboBoxVille.getSelectedItem();
+                    ((VueAdresse_M5_UnCP) (this.getVue().getParent())).getjTextFieldCdp().setText(jTextFieldCPChoisi.getText());
+                    ((VueAdresse_M5_UnCP) (this.getVue().getParent())).getjTextFieldVille().setText(ville.getNom());
+                    ((VueAdresse_M5_UnCP) (this.getVue().getParent())).setVilleCourante(ville);
+                    this.getVue().dispose();
+                }
             }
         }
 
@@ -229,9 +274,24 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
         @Override
         public void keyReleased(KeyEvent e) {
         }
+
+        public VueChoixVilleApproxUnCP getVue() {
+            return vue;
+        }
+
+        public void setVue(VueChoixVilleApproxUnCP vue) {
+            this.vue = vue;
+        }
+
+        public Ecouteur(VueChoixVilleApproxUnCP vue) {
+            this.vue = vue;
+        }
+
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAnnuler;
     private javax.swing.JButton jButtonValider;
     private javax.swing.JComboBox jComboBoxVille;
     private javax.swing.JLabel jLabel1;
