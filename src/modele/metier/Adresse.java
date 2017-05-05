@@ -9,7 +9,7 @@ package modele.metier;
  */
 public class Adresse {
 
-    private int id;         // identifiant BDD de l'adresse
+    private int id; 
     private String rue;
     private String cp;
     private String ville;
@@ -60,11 +60,16 @@ public class Adresse {
      *
      * @return String attributs de l'adresse
      */
+//    @Override
+//    public String toString() {
+//        return ("Adresse{rue: " + this.getRue() + "\tcp: " + this.getCp() + "\tville: " + this.getVille()) + "}";
+
     @Override
     public String toString() {
-        return ("Adresse{rue: " + this.getRue() + "\tcp: " + this.getCp() + "\tville: " + this.getVille()) + "}";
+        return "Adresse{" + "id=" + id + ", rue=" + rue + ", cp=" + cp + ", ville=" + ville + '}';
     }
 
+//    }
     /**
      *
      * @return
