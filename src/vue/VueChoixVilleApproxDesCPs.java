@@ -172,10 +172,14 @@ public class VueChoixVilleApproxDesCPs extends javax.swing.JDialog {
             }
             jComboBoxVille.setModel(jComboBoxModelVille);
             jListModelCPs.clear();
-            // 1 seul CP
-            if (lesVilles.size() > 0 && lesVilles.get(0).getCp().length() < 6) {
-                jListModelCPs.addElement(lesVilles.get(0).getCp());
-                jTextFieldCPChoisi.setText(lesVilles.get(0).getCp());
+            jTextFieldCP.setText(jTextFieldCP.getText().trim());
+            if (lesVilles.size() > 0) {
+                remplissageListeCps(lesVilles.get(0).getCp());
+                if (jTextFieldCP.getText().length() == 5) {
+                    jTextFieldCPChoisi.setText(jTextFieldCP.getText());
+                } else {
+                    jTextFieldCPChoisi.setText((String) jListModelCPs.get(0));
+                }
             } else {
                 jTextFieldCPChoisi.setText("");
             }
@@ -225,133 +229,6 @@ public class VueChoixVilleApproxDesCPs extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(VueChoixVilleApproxDesCPs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -391,7 +268,7 @@ public class VueChoixVilleApproxDesCPs extends javax.swing.JDialog {
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyChar() == Event.ENTER) {
-                if (jTextFieldCP.getText() != "") {
+                if (!jTextFieldCP.getText().equals("")) {
                     initialisationComboVilles();
                 }
             }
