@@ -29,6 +29,8 @@ public class TestDaoAdresse {
             System.out.println("Test4 effectué : mise à jour\n");
             test5_Delete(99);
             System.out.println("Test5 effectué : suppression\n");
+            test6_SelectMultiple();
+            System.out.println("Test6 effectué : sélection multiple avec clé et ordre\n");
         } catch (ClassNotFoundException e) {
             System.err.println("Erreur de pilote JDBC : " + e);
         } catch (SQLException e) {
@@ -64,7 +66,7 @@ public class TestDaoAdresse {
      */
     public static void test1_SelectUnique(int idAdresse) throws SQLException {
         Adresse cetteAdresse = DaoAdresse.selectOne(idAdresse);
-        System.out.println("Adresse d'identifiant : "+idAdresse+" : "+cetteAdresse.toString());
+        System.out.println("Adresse d'identifiant : " + idAdresse + " : " + cetteAdresse.toString());
     }
 
     /**
@@ -75,38 +77,68 @@ public class TestDaoAdresse {
      */
     public static void test2_SelectMultiple() throws SQLException {
         List<Adresse> desAdresses = DaoAdresse.selectAll();
-        System.out.println("Les adresses lues : "+desAdresses.toString());
+        System.out.println("Les adresses lues : " + desAdresses.toString());
     }
 
     /**
-     * Ajoute un client 
+     * Ajoute un client
+     *
      * @throws SQLException
      */
     public static void test3_Insert(int idAdresse) throws SQLException {
         Adresse uneAdresse = new Adresse("141 route de Clisson", "44230", "Saint Sébastien sur Loire");
-        int nb= DaoAdresse.insert(idAdresse, uneAdresse);
-        System.out.println("Une nouvelle adresse a été insérée: "+nb);
+        int nb = DaoAdresse.insert(idAdresse, uneAdresse);
+        System.out.println("Une nouvelle adresse a été insérée: " + nb);
         test1_SelectUnique(idAdresse);
     }
 
     /**
      * Modifie une adresse
+     *
      * @throws SQLException
      */
     public static void test4_Update(int idAdresse) throws SQLException {
-         Adresse uneAdresse = new Adresse("1 rue Crébillon", "44000", "Nantes");
-        int nb= DaoAdresse.update(idAdresse, uneAdresse);
-        System.out.println("Une adresse a été modifiée: "+nb);
+        Adresse uneAdresse = new Adresse("1 rue Crébillon", "44000", "Nantes");
+        int nb = DaoAdresse.update(idAdresse, uneAdresse);
+        System.out.println("Une adresse a été modifiée: " + nb);
         test1_SelectUnique(idAdresse);
     }
 
     /**
      * Supprime un enregistrement
+     *
      * @throws SQLException
      */
     public static void test5_Delete(int idAdresse) throws SQLException {
-        int nb= DaoAdresse.delete(idAdresse);
-        System.out.println("Une adresse a été supprimée: "+nb);
+        int nb = DaoAdresse.delete(idAdresse);
+        System.out.println("Une adresse a été supprimée: " + nb);
         test2_SelectMultiple();
-   }
+    }
+
+    /**
+     * Affiche toutes les villes
+     *
+     * @param cnx : connexion ouverte sur la base de données
+     * @throws SQLException
+     */
+    public static void test6_SelectMultiple() throws SQLException {
+        List<Adresse> desAdresses = DaoAdresse.selectAll(0, 1);
+        System.out.println("ordre de création, croissant");
+        System.out.println("Les adresses lues : " + desAdresses.toString());
+        desAdresses = DaoAdresse.selectAll(1, 1);
+        System.out.println("ordre des Id, croissant");
+        System.out.println("Les adresses lues : " + desAdresses.toString());
+        desAdresses = DaoAdresse.selectAll(2, 1);
+        System.out.println("ordre des villes, croissant");
+        System.out.println("Les adresses lues : " + desAdresses.toString());
+        desAdresses = DaoAdresse.selectAll(0, 2);
+        System.out.println("ordre de création, décroissant");
+        System.out.println("Les adresses lues : " + desAdresses.toString());
+        desAdresses = DaoAdresse.selectAll(1, 2);
+        System.out.println("ordre des Id, décroissant");
+        System.out.println("Les adresses lues : " + desAdresses.toString());
+        desAdresses = DaoAdresse.selectAll(2, 2);
+        System.out.println("ordre des villes, décroissant");
+        System.out.println("Les adresses lues : " + desAdresses.toString());
+    }
 }
