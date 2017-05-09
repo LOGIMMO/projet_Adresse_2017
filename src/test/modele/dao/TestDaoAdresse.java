@@ -122,20 +122,21 @@ public class TestDaoAdresse {
      * @throws SQLException
      */
     public static void test6_SelectMultiple() throws SQLException {
-        List<Adresse> desAdresses = DaoAdresse.selectAll(0, 1);
+        List<Adresse> desAdresses = null;
+        desAdresses = DaoAdresse.selectAll(0, 1);
         System.out.println("ordre de création, croissant");
-        System.out.println("Les adresses lues : " + desAdresses.toString());
-        desAdresses = DaoAdresse.selectAll(1, 1);
-        System.out.println("ordre des Id, croissant");
-        System.out.println("Les adresses lues : " + desAdresses.toString());
-        desAdresses = DaoAdresse.selectAll(2, 1);
-        System.out.println("ordre des villes, croissant");
         System.out.println("Les adresses lues : " + desAdresses.toString());
         desAdresses = DaoAdresse.selectAll(0, 2);
         System.out.println("ordre de création, décroissant");
         System.out.println("Les adresses lues : " + desAdresses.toString());
+        desAdresses = DaoAdresse.selectAll(1, 1);
+        System.out.println("ordre des Id, croissant");
+        System.out.println("Les adresses lues : " + desAdresses.toString());
         desAdresses = DaoAdresse.selectAll(1, 2);
         System.out.println("ordre des Id, décroissant");
+        System.out.println("Les adresses lues : " + desAdresses.toString());
+        desAdresses = DaoAdresse.selectAll(2, 1);
+        System.out.println("ordre des villes, croissant");
         System.out.println("Les adresses lues : " + desAdresses.toString());
         desAdresses = DaoAdresse.selectAll(2, 2);
         System.out.println("ordre des villes, décroissant");

@@ -33,7 +33,7 @@ public class VueAdresse_M3 extends javax.swing.JFrame {
     private int indiceAdresseCourante;  // indice de l'adresse courante dans la liste
     private Adresse adresseCourante;    // l'adresse courante
     private int cleTri;                 // clé de tri, 0 = ordre initial, 1 = id
-    // 2 = ville
+                                        // 2 = ville
     private int ordreTri;               // ordre de tri, 1 = croissant, 2 = décroissant
 
     private Ecouteur ecouteur;          // l'écouteur d'événements
