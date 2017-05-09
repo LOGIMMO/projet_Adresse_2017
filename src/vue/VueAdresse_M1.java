@@ -15,6 +15,7 @@ import modele.metier.Adresse;
 /**
  * Version sans gestion de la touche ESCAPE dans le champ de saisie de l'Id
  * événement ActionPerformed sur jTextFieldId
+ *
  * @author btssio
  */
 public class VueAdresse_M1 extends javax.swing.JFrame {
@@ -43,7 +44,6 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         jButtonAnnuler.addActionListener(ecouteur);
         jButtonQuitter.addActionListener(ecouteur);
         jTextFieldId.addActionListener(ecouteur);
-
 
         // création du singleton Jdbc
         Jdbc.creer("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:", "@localhost:1521:XE", "", "btssio", "btssio");
@@ -173,7 +173,7 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         this.jTextFieldCdp.setText("");
         this.jTextFieldVille.setText("");
     }
-    
+
     public void afficherPremiereAdresse() {
         try {
             Jdbc.getInstance().connecter();
@@ -508,7 +508,6 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
         modeAffichage();
     }
 
-
     /**
      * @param args the command line arguments
      */
@@ -535,37 +534,7 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(VueAdresse_M1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -577,7 +546,7 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
 
     /**
      * classe privée Ecouteur d'événements, implémentant les méthodes de
-     * l'interface ActionListener, ie la méthode actionPerformed 
+     * l'interface ActionListener, ie la méthode actionPerformed
      */
     private class Ecouteur implements ActionListener {
 
@@ -626,9 +595,9 @@ public class VueAdresse_M1 extends javax.swing.JFrame {
             } else if (e.getSource() == jButtonQuitter) {
                 System.exit(0);
             } else if (e.getSource() == jTextFieldId) {
-                        if (etat != 2) {
-                recherche();
-                        }
+                if (etat != 2) {
+                    recherche();
+                }
             }
 
         }
