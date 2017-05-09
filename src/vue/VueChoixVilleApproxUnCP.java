@@ -169,6 +169,15 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
                 jComboBoxModelVille.addElement(ville);
             }
             jComboBoxVille.setModel(jComboBoxModelVille);
+            if (lesVilles.size() > 0) {
+                if (jTextFieldCP.getText().length() == 5) {
+                    jTextFieldCPChoisi.setText(jTextFieldCP.getText());
+                } else {
+                    jTextFieldCPChoisi.setText(((Ville)jComboBoxModelVille.getElementAt(0)).getCp());
+                }
+            } else {
+                jTextFieldCPChoisi.setText("");
+            }
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(this, "Pilote absent");
         } catch (SQLException ex) {
