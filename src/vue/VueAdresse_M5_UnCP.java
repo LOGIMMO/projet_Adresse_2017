@@ -248,7 +248,7 @@ public class VueAdresse_M5_UnCP extends javax.swing.JFrame {
         jButtonChoisirVille = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Gestion des adresses Mission 3");
+        setTitle("Gestion des adresses Mission 5");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Id : ");
@@ -362,7 +362,7 @@ public class VueAdresse_M5_UnCP extends javax.swing.JFrame {
 
         jCheckBoxTriDecroissant.setText("Tri décroissant");
 
-        jButtonChoisirVille.setText("Chosir ville");
+        jButtonChoisirVille.setText("Choisir ville");
         jButtonChoisirVille.setEnabled(false);
         jButtonChoisirVille.setNextFocusableComponent(jButtonValider);
 

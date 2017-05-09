@@ -37,6 +37,7 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
         jComboBoxVille.addActionListener(ecouteur);
         jTextFieldCP.addKeyListener(ecouteur);
         jButtonValider.addActionListener(ecouteur);
+        jButtonAnnuler.addActionListener(ecouteur);
     }
 
     /**
@@ -201,23 +202,8 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(VueChoixVilleApproxUnCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
-
+  
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -255,6 +241,8 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
                     ((VueAdresse_M5_UnCP) (this.getVue().getParent())).setVilleCourante(ville);
                     this.getVue().dispose();
                 }
+            } else if (e.getSource() == jButtonAnnuler) {
+                    this.getVue().dispose();                
             }
         }
 

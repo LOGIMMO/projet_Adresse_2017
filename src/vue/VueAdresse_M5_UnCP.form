@@ -7,7 +7,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="Gestion des adresses Mission 3"/>
+    <Property name="title" type="java.lang.String" value="Gestion des adresses Mission 5"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -356,7 +356,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButtonChoisirVille">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Chosir ville"/>
+        <Property name="text" type="java.lang.String" value="Choisir ville"/>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="jButtonValider"/>
