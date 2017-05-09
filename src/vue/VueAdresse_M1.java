@@ -6,37 +6,32 @@ package vue;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static java.lang.System.exit;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modele.dao.DaoAdresse;
 import modele.dao.Jdbc;
 import modele.metier.Adresse;
 
 /**
- *
+ * Version sans gestion de la touche ESCAPE dans le champ de saisie de l'Id
+ * événement ActionPerformed sur jTextFieldId
  * @author btssio
  */
-public class VueAdresse_init extends javax.swing.JFrame {
+public class VueAdresse_M1 extends javax.swing.JFrame {
 
     private int etat; // 1 affichage, 2 ajout, 3 suppression, 4 modification, 
     // 5 recherche, possibilité d'utiliser enum
 
     private Adresse adresseCourante;    // l'adresse courante
 
-    private Ecouteur ecouteur;
+    private Ecouteur ecouteur;          // l'écouteur d'événements
 
     /**
      * Creates new form VueAdresse
      */
-    public VueAdresse_init() {
+    public VueAdresse_M1() {
         // initialisation des composants grahiques de l'interface
         initComponents();
-
         // instanciation d'un listener
         ecouteur = new Ecouteur();
         // ajout du listener au différents contrôles écoutés
@@ -46,24 +41,23 @@ public class VueAdresse_init extends javax.swing.JFrame {
         jButtonSupprimer.addActionListener(ecouteur);
         jButtonValider.addActionListener(ecouteur);
         jButtonAnnuler.addActionListener(ecouteur);
+        jButtonQuitter.addActionListener(ecouteur);
+        jTextFieldId.addActionListener(ecouteur);
+
 
         // création du singleton Jdbc
         Jdbc.creer("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:", "@localhost:1521:XE", "", "btssio", "btssio");
-        // passage en mode affichage
-        modeAffichage();
 
         // affichage de la première adresse
-        try {
-            Jdbc.getInstance().connecter();
-            adresseCourante = DaoAdresse.selectFirst();
-            afficherAdresse(adresseCourante);
-        } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(this, "Pilote absent");
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Echec de connexion");
-        }
+        afficherPremiereAdresse();
     }
 
+    /**
+     * Fixe les contrôles actifs en mode Affichage. les zones de saisie sont
+     * inactives les boutons Ajouter, Modifier, supprimer sont actifs les
+     * boutons Annuler et Valider sont inactifs le bouton Quitter est toujours
+     * actif etat vaut 1
+     */
     private void modeAffichage() {
         etat = 1;
         jTextFieldId.setEnabled(false);
@@ -179,6 +173,19 @@ public class VueAdresse_init extends javax.swing.JFrame {
         this.jTextFieldCdp.setText("");
         this.jTextFieldVille.setText("");
     }
+    
+    public void afficherPremiereAdresse() {
+        try {
+            Jdbc.getInstance().connecter();
+            adresseCourante = DaoAdresse.selectFirst();
+            afficherAdresse(adresseCourante);
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Pilote absent");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Echec de connexion");
+        }
+        modeAffichage();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -189,7 +196,6 @@ public class VueAdresse_init extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextFieldId = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -198,19 +204,19 @@ public class VueAdresse_init extends javax.swing.JFrame {
         jTextFieldCdp = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jTextFieldVille = new javax.swing.JTextField();
+        jButtonQuitter = new javax.swing.JButton();
+        jPanelActions = new javax.swing.JPanel();
+        jButtonValider = new javax.swing.JButton();
+        jButtonAnnuler = new javax.swing.JButton();
         jButtonAjouter = new javax.swing.JButton();
         jButtonSupprimer = new javax.swing.JButton();
         jButtonRechercher = new javax.swing.JButton();
         jButtonModifier = new javax.swing.JButton();
-        jButtonValider = new javax.swing.JButton();
-        jButtonAnnuler = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Gestion des adresses version initiale");
-
-        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Adresse");
+        setTitle("Gestion des adresses Mission 1");
+        setResizable(false);
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Id : ");
@@ -221,12 +227,20 @@ public class VueAdresse_init extends javax.swing.JFrame {
         jLabel3.setToolTipText("");
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel4.setText("Cdp :");
+        jLabel4.setText("CP : ");
         jLabel4.setToolTipText("");
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("Ville : ");
         jLabel5.setToolTipText("");
+
+        jButtonQuitter.setText("Quitter");
+
+        jPanelActions.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions"));
+
+        jButtonValider.setText("Valider");
+
+        jButtonAnnuler.setText("Annuler");
 
         jButtonAjouter.setText("Ajouter");
 
@@ -236,9 +250,44 @@ public class VueAdresse_init extends javax.swing.JFrame {
 
         jButtonModifier.setText("Modifier");
 
-        jButtonValider.setText("Valider");
+        javax.swing.GroupLayout jPanelActionsLayout = new javax.swing.GroupLayout(jPanelActions);
+        jPanelActions.setLayout(jPanelActionsLayout);
+        jPanelActionsLayout.setHorizontalGroup(
+            jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelActionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanelActionsLayout.createSequentialGroup()
+                        .addComponent(jButtonAjouter)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonSupprimer))
+                    .addComponent(jButtonAnnuler))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonModifier)
+                    .addComponent(jButtonValider, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addComponent(jButtonRechercher)
+                .addContainerGap())
+        );
+        jPanelActionsLayout.setVerticalGroup(
+            jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelActionsLayout.createSequentialGroup()
+                .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonAjouter)
+                    .addComponent(jButtonSupprimer)
+                    .addComponent(jButtonModifier)
+                    .addComponent(jButtonRechercher))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonAnnuler)
+                    .addComponent(jButtonValider))
+                .addGap(0, 9, Short.MAX_VALUE))
+        );
 
-        jButtonAnnuler.setText("Annuler");
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Adresse");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -249,44 +298,38 @@ public class VueAdresse_init extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel3))
-                                        .addComponent(jLabel4))
-                                    .addComponent(jLabel5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jTextFieldVille, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldCdp, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextFieldRue, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextFieldId, javax.swing.GroupLayout.Alignment.LEADING)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jButtonAjouter)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButtonSupprimer))
-                                    .addComponent(jButtonAnnuler))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButtonModifier, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButtonValider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addComponent(jButtonRechercher))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(156, 156, 156)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel3))
+                            .addComponent(jLabel5)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jTextFieldVille, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                    .addComponent(jTextFieldCdp, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldRue, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldId, javax.swing.GroupLayout.Alignment.LEADING))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 41, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanelActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonQuitter))
+                        .addGap(41, 41, 41))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(214, 214, 214))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -296,49 +339,53 @@ public class VueAdresse_init extends javax.swing.JFrame {
                     .addComponent(jTextFieldRue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextFieldCdp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldCdp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jTextFieldVille, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAjouter)
-                    .addComponent(jButtonSupprimer)
-                    .addComponent(jButtonRechercher)
-                    .addComponent(jButtonModifier))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonValider)
-                    .addComponent(jButtonAnnuler))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addComponent(jPanelActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonQuitter)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * recherche dans la BDD l'adresse dont l'id a été saisi. Si elle est
+     * trouvée, cette adresse devient l'adresse courante et on passe en mode
+     * affichage
+     */
     private void recherche() {
         Adresse cetteAdresse = null;
         if (!jTextFieldId.getText().equals("")) {
-            int idAdresse = Integer.valueOf(jTextFieldId.getText());
             try {
-                Jdbc.getInstance().connecter();
-                cetteAdresse = DaoAdresse.selectOne(idAdresse);
-                if (cetteAdresse != null) {
-                    adresseCourante = cetteAdresse;
-                    afficherAdresse(adresseCourante);
-                    modeAffichage();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Identifiant inconnu");
-                    jTextFieldId.selectAll();
+                int idAdresse = Integer.valueOf(jTextFieldId.getText());
+                try {
+                    Jdbc.getInstance().connecter();
+                    cetteAdresse = DaoAdresse.selectOne(idAdresse);
+                    if (cetteAdresse != null) {
+                        adresseCourante = cetteAdresse;
+                        afficherAdresse(adresseCourante);
+                        modeAffichage();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Identifiant inconnu");
+                        jTextFieldId.selectAll();
+                    }
+                } catch (ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(this, "Pilote BDD absent");
+                    System.exit(0);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "Problème avec la Base de données");
                 }
-            } catch (ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(this, "Pilote BDD absent");
-                System.exit(0);
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Problème avec la Base de données");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "il faut saisir un entier");
+                jTextFieldId.setText("");
+                jTextFieldId.requestFocus();
             }
         } else {
             JOptionPane.showMessageDialog(this, "Le champ Id est vide");
@@ -346,6 +393,9 @@ public class VueAdresse_init extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Mofifie dans la BDD l'adresse courante.
+     */
     private void modification() {
         Adresse cetteAdresse = null;
         int idAdresse = Integer.valueOf(jTextFieldId.getText());
@@ -366,6 +416,11 @@ public class VueAdresse_init extends javax.swing.JFrame {
         modeAffichage();
     }
 
+    /**
+     * Ajoute dans la BDD l'adresse saisie. La nouvelle adresse devient
+     * l'adresse courante. En cas d'échec, la premierè adresse devient l'adresse
+     * courante et est affichée
+     */
     private void ajout() {
         boolean erreurBDD = false;
         boolean erreurSaisie = false;
@@ -407,16 +462,7 @@ public class VueAdresse_init extends javax.swing.JFrame {
         }
         // s'il y a eu une erreur avec la BDD, on réaffiche la première adresse.
         if (erreurBDD) {
-            try {
-                Jdbc.getInstance().connecter();
-                adresseCourante = DaoAdresse.selectFirst();
-                afficherAdresse(adresseCourante);
-                modeAffichage();
-            } catch (ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(this, "Pilote absent");
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Echec de connexion");
-            }
+            afficherPremiereAdresse();
             // s'il y a une rreur de saisie sur l'id, on place le cursuer sur la zone de saisie de l'id
         } else if (erreurSaisie) {
             jTextFieldId.requestFocus();
@@ -426,6 +472,10 @@ public class VueAdresse_init extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Supprime l'adresse courante de la BDD. La première adresse devient
+     * l'adresse courante et est affichée
+     */
     private void suppression() {
         int idAdresse = Integer.valueOf(jTextFieldId.getText());
         if (!jTextFieldId.getText().equals("")) {
@@ -458,6 +508,7 @@ public class VueAdresse_init extends javax.swing.JFrame {
         modeAffichage();
     }
 
+
     /**
      * @param args the command line arguments
      */
@@ -475,25 +526,59 @@ public class VueAdresse_init extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_init.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_init.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_init.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_init.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VueAdresse_init().setVisible(true);
+                new VueAdresse_M1().setVisible(true);
             }
         });
     }
 
+    /**
+     * classe privée Ecouteur d'événements, implémentant les méthodes de
+     * l'interface ActionListener, ie la méthode actionPerformed 
+     */
     private class Ecouteur implements ActionListener {
 
         @Override
@@ -515,8 +600,6 @@ public class VueAdresse_init extends javax.swing.JFrame {
                 suppression();
             } else if (e.getSource() == jButtonValider) {
                 switch (etat) {
-                    case 1:
-                        break;
                     case 2:
                         ajout();
                         break;
@@ -530,21 +613,9 @@ public class VueAdresse_init extends javax.swing.JFrame {
                 }
             } else if (e.getSource() == jButtonAnnuler) {
                 switch (etat) {
-                    case 1:
-                        break;
                     case 2:     // annulation ajout
                     case 5:     // annulation recherche
-                        try {
-                            Jdbc.getInstance().connecter();
-                            adresseCourante = DaoAdresse.selectFirst();
-                            afficherAdresse(adresseCourante);
-                            modeAffichage();
-                        } catch (ClassNotFoundException ex) {
-                            JOptionPane.showMessageDialog(null, "Pilote absent");
-                        } catch (SQLException ex) {
-                            JOptionPane.showMessageDialog(null, "Echec de connexion");
-                        }
-                        modeAffichage();
+                        afficherPremiereAdresse();
                         break;
                     case 4:     // annulation modification
                         afficherAdresse(adresseCourante);
@@ -552,13 +623,21 @@ public class VueAdresse_init extends javax.swing.JFrame {
                         break;
                     default:
                 }
+            } else if (e.getSource() == jButtonQuitter) {
+                System.exit(0);
+            } else if (e.getSource() == jTextFieldId) {
+                        if (etat != 2) {
+                recherche();
+                        }
             }
+
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAjouter;
     private javax.swing.JButton jButtonAnnuler;
     private javax.swing.JButton jButtonModifier;
+    private javax.swing.JButton jButtonQuitter;
     private javax.swing.JButton jButtonRechercher;
     private javax.swing.JButton jButtonSupprimer;
     private javax.swing.JButton jButtonValider;
@@ -567,6 +646,7 @@ public class VueAdresse_init extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanelActions;
     private javax.swing.JTextField jTextFieldCdp;
     private javax.swing.JTextField jTextFieldId;
     private javax.swing.JTextField jTextFieldRue;
