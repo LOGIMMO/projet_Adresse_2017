@@ -26,8 +26,8 @@ public class VueAdresse_M2 extends javax.swing.JFrame {
     private int etat; // 1 affichage, 2 ajout, 3 suppression, 4 modification, 
     // 5 recherche, possibilité d'utiliser enum
 
-    private List<Adresse> lesAdresses;
-    private int indiceAdresseCourante;
+    private List<Adresse> lesAdresses;  // liste des adresses
+    private int indiceAdresseCourante;  // indice de l'adresse courante
     private Adresse adresseCourante;    // l'adresse courante
 
     private Ecouteur ecouteur;          // l'écouteur d'événements
@@ -444,8 +444,6 @@ public class VueAdresse_M2 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Le champ Id est vide");
             jTextFieldId.requestFocus();
         }
-        
- 
     }
 
     /**
@@ -664,13 +662,13 @@ public class VueAdresse_M2 extends javax.swing.JFrame {
             } else if (e.getSource() == jButtonPrecedent) {
                 if (indiceAdresseCourante > 0) {
                     indiceAdresseCourante--;
-                    adresseCourante = lesAdresses.get(indiceAdresseCourante);;
+                    adresseCourante = lesAdresses.get(indiceAdresseCourante);
                     afficherAdresse(adresseCourante);
                 }
             } else if (e.getSource() == jButtonSuivant) {
                 if (indiceAdresseCourante < lesAdresses.size() - 1) {
                     indiceAdresseCourante++;
-                    adresseCourante = lesAdresses.get(indiceAdresseCourante);;
+                    adresseCourante = lesAdresses.get(indiceAdresseCourante);
                     afficherAdresse(adresseCourante);
                 }
             } else if (e.getSource() == jTextFieldId) {
