@@ -9,31 +9,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import static java.lang.System.exit;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import modele.dao.DaoAdresse1;
+import modele.dao.DaoAdresse2;
 import modele.dao.Jdbc;
-import modele.metier.Adresse1;
+import modele.metier.Adresse2;
 import modele.metier.Ville;
 
 /**
  *
  * @author btssio
  */
-public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
+public class VueAdresse_M5_DesCPs extends javax.swing.JFrame {
 
     private int etat; // 1 affichage, 2 ajout, 3 suppression, 4 modification, 
     // 5 recherche, possibilité d'utiliser enum
 
-    private List<Adresse1> lesAdresses;  // liste des adresses
+    private List<Adresse2> lesAdresses;  // liste des adresses
     private int indiceAdresseCourante;  // indice de l'adresse courante dans la liste
-    private Adresse1 adresseCourante;    // l'adresse courante
+    private Adresse2 adresseCourante;    // l'adresse courante
     private int cleTri = 0;                 // clé de tri, 0 = ordre initial, 1 = id
     // 2 = ville
     private int ordreTri = 1;               // ordre de tri, 1 = croissant, 2 = décroissant
@@ -44,7 +40,7 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
     /**
      * Creates new form VueAdresse
      */
-    public VueAdresse_M5_DesCP() {
+    public VueAdresse_M5_DesCPs() {
         // initialisation des composants grahiques de l'interface
         initComponents();
         jTextFieldCdp.setSize(4, 19);
@@ -74,7 +70,7 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
         try {
             // initialisation de la liste des adresses
             Jdbc.getInstance().connecter();
-            lesAdresses = DaoAdresse1.selectAll();
+            lesAdresses = DaoAdresse2.selectAll();
             afficherPremiereAdresse();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Pilote BDD absent");
@@ -195,10 +191,10 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
      *
      * @param l'adresse à afficher
      */
-    private void afficherAdresse(Adresse1 uneAdresse) {
+    private void afficherAdresse(Adresse2 uneAdresse) {
         this.jTextFieldId.setText(Integer.toString(uneAdresse.getId()));
         this.jTextFieldRue.setText(uneAdresse.getRue());
-        this.jTextFieldCdp.setText(uneAdresse.getVille().getCp());
+        this.jTextFieldCdp.setText(uneAdresse.getCp());
         this.jTextFieldVille.setText(uneAdresse.getVille().getNom());
     }
 
@@ -457,11 +453,11 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
      * affichage
      */
     private void recherche() {
-        Adresse1 cetteAdresse = null;
+        Adresse2 cetteAdresse = null;
         if (!jTextFieldId.getText().equals("")) {
             try {
                 int idAdresse = Integer.valueOf(jTextFieldId.getText());
-                int indice = lesAdresses.indexOf(new Adresse1(idAdresse, null, null));
+                int indice = lesAdresses.indexOf(new Adresse2(idAdresse, null, null, null));
                 if (indice != -1) {
                     indiceAdresseCourante = indice;
                     adresseCourante = lesAdresses.get(indiceAdresseCourante);
@@ -487,16 +483,16 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
      * Mofifie dans la BDD l'adresse courante.
      */
     private void modification() {
-        Adresse1 cetteAdresse;
+        Adresse2 cetteAdresse;
         int idAdresse = Integer.valueOf(jTextFieldId.getText());
         String rueAdresse = this.jTextFieldRue.getText();
-//        String cdpAdresse = this.jTextFieldCdp.getText();
+        String cdpAdresse = this.jTextFieldCdp.getText();
 //        String villeAdresse = this.jTextFieldVille.getText();
         
-        cetteAdresse = new Adresse1(idAdresse, rueAdresse, villeCourante);
+        cetteAdresse = new Adresse2(idAdresse, rueAdresse, cdpAdresse, villeCourante);
         try {
             Jdbc.getInstance().connecter();
-            DaoAdresse1.update(idAdresse, cetteAdresse);
+            DaoAdresse2.update(idAdresse, cetteAdresse);
             JOptionPane.showMessageDialog(this, "Modification effectuée");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Echec de la mise à jour de la base de données");
@@ -518,16 +514,16 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
         if (!jTextFieldId.getText().equals("")) {
             try {
                 int idAdresse = Integer.valueOf(jTextFieldId.getText());
-                Adresse1 cetteAdresse;
+                Adresse2 cetteAdresse;
                 try {
                     Jdbc.getInstance().connecter();
-                    boolean present = lesAdresses.contains(new Adresse1(idAdresse, null, null));
+                    boolean present = lesAdresses.contains(new Adresse2(idAdresse, null, null, null));
                     if (!present) {
-                        cetteAdresse = new Adresse1(idAdresse, jTextFieldRue.getText(), villeCourante);
-                        DaoAdresse1.insert(idAdresse, cetteAdresse);
+                        cetteAdresse = new Adresse2(idAdresse, jTextFieldRue.getText(), jTextFieldCdp.getText(), villeCourante);
+                        DaoAdresse2.insert(idAdresse, cetteAdresse);
                         adresseCourante = cetteAdresse;
                         afficherAdresse(adresseCourante);
-                        lesAdresses = DaoAdresse1.selectAll();
+                        lesAdresses = DaoAdresse2.selectAll();
                         indiceAdresseCourante = lesAdresses.indexOf(adresseCourante);
                         JOptionPane.showMessageDialog(this, "Ajout effectué");
                     } else {
@@ -569,19 +565,19 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
     private void suppression() {
         int idAdresse = Integer.valueOf(jTextFieldId.getText());
         if (!jTextFieldId.getText().equals("")) {
-            Adresse1 cetteAdresse;
+            Adresse2 cetteAdresse;
 
-            int indice = lesAdresses.indexOf(new Adresse1(idAdresse, null, null));
+            int indice = lesAdresses.indexOf(new Adresse2(idAdresse, null, null, null));
             cetteAdresse = lesAdresses.get(indice);
             if (cetteAdresse != null) {
                 int rep = JOptionPane.showConfirmDialog(this, "Etes-vous sûr(e) ?", "Suppression", JOptionPane.YES_NO_OPTION);
                 if (rep == JOptionPane.YES_OPTION) {
                     try {
                         Jdbc.getInstance().connecter();
-                        DaoAdresse1.delete(idAdresse);
+                        DaoAdresse2.delete(idAdresse);
                         effacerAdresse();
                         JOptionPane.showMessageDialog(this, "Suppression effectuée");
-                        lesAdresses = DaoAdresse1.selectAll();
+                        lesAdresses = DaoAdresse2.selectAll();
                         afficherPremiereAdresse();
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(this, "Echec de la suppression dans la BDD");
@@ -611,7 +607,7 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
 
     private void selectionAffichage() {
         try {
-            lesAdresses = DaoAdresse1.selectAll(cleTri, ordreTri);
+            lesAdresses = DaoAdresse2.selectAll(cleTri, ordreTri);
             indiceAdresseCourante = 0;
             adresseCourante = lesAdresses.get(indiceAdresseCourante);
             afficherAdresse(adresseCourante);
@@ -637,14 +633,30 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCPs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCPs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCPs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCPs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -665,7 +677,7 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VueAdresse_M5_DesCP().setVisible(true);
+                new VueAdresse_M5_DesCPs().setVisible(true);
             }
         });
     }
@@ -678,7 +690,7 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
      */
     private class Ecouteur implements ActionListener, KeyListener {
 
-        private VueAdresse_M5_DesCP vue;
+        private VueAdresse_M5_DesCPs vue;
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -754,7 +766,7 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
                 }
                 selectionAffichage();
             } else if (e.getSource() == jButtonChoisirVille) {
-                VueChoixVilleApproxUnCP vueChoixVille_Approx = new VueChoixVilleApproxUnCP(this.getVue(), true);
+                VueChoixVilleApproxDesCPs vueChoixVille_Approx = new VueChoixVilleApproxDesCPs(this.getVue(), true);
                 vueChoixVille_Approx.setVisible(true);
             }
         }
@@ -776,15 +788,15 @@ public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
         public void keyReleased(KeyEvent e) {
         }
 
-        public Ecouteur(VueAdresse_M5_DesCP vue) {
+        public Ecouteur(VueAdresse_M5_DesCPs vue) {
             this.vue = vue;
         }
 
-        public VueAdresse_M5_DesCP getVue() {
+        public VueAdresse_M5_DesCPs getVue() {
             return vue;
         }
 
-        public void setVue(VueAdresse_M5_DesCP vue) {
+        public void setVue(VueAdresse_M5_DesCPs vue) {
             this.vue = vue;
         }
 

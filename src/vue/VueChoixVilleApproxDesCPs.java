@@ -37,11 +37,13 @@ public class VueChoixVilleApproxDesCPs extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         // instanciation d'un listener
-        ecouteur = new Ecouteur();
+        ecouteur = new Ecouteur(this);
         // ajout du listener au différents contrôles écoutés
         jComboBoxVille.addActionListener(ecouteur);
         jTextFieldCP.addKeyListener(ecouteur);
         jListCPs.addListSelectionListener(ecouteur);
+        jButtonAnnuler.addActionListener(ecouteur);
+        jButtonValider.addActionListener(ecouteur);
 
         jComboBoxModelVille = new DefaultComboBoxModel();
         jComboBoxVille.setModel(jComboBoxModelVille);
@@ -71,6 +73,7 @@ public class VueChoixVilleApproxDesCPs extends javax.swing.JDialog {
         jListCPs = new javax.swing.JList();
         jLabel5 = new javax.swing.JLabel();
         jTextFieldCPChoisi = new javax.swing.JTextField();
+        jButtonAnnuler = new javax.swing.JButton();
 
         jLabel4.setText("jLabel4");
 
@@ -94,6 +97,8 @@ public class VueChoixVilleApproxDesCPs extends javax.swing.JDialog {
 
         jTextFieldCPChoisi.setEnabled(false);
 
+        jButtonAnnuler.setText("Annuler");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,19 +115,19 @@ public class VueChoixVilleApproxDesCPs extends javax.swing.JDialog {
                         .addComponent(jLabelListCPs)
                         .addGap(30, 30, 30)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel2))
-                            .addGap(12, 12, 12)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jComboBoxVille, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldCP, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextFieldCPChoisi, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(116, 116, 116)
-                            .addComponent(jButtonValider))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBoxVille, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldCP, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldCPChoisi, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButtonAnnuler)
+                        .addGap(40, 40, 40)
+                        .addComponent(jButtonValider)))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -147,7 +152,9 @@ public class VueChoixVilleApproxDesCPs extends javax.swing.JDialog {
                     .addComponent(jLabel5)
                     .addComponent(jTextFieldCPChoisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
-                .addComponent(jButtonValider)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonValider)
+                    .addComponent(jButtonAnnuler))
                 .addContainerGap())
         );
 
@@ -252,12 +259,27 @@ public class VueChoixVilleApproxDesCPs extends javax.swing.JDialog {
      * keyReleased
      */
     private class Ecouteur implements ActionListener, KeyListener, ListSelectionListener {
-
+        private VueChoixVilleApproxDesCPs vue;
+        
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == jComboBoxVille) {
                 remplissageListeCps(((Ville) jComboBoxVille.getSelectedItem()).getCp());
-//                jTextFieldCP.setText(((Ville) jComboBoxVille.getSelectedItem()).getCp());
+               jTextFieldCPChoisi.setText(((Ville) jComboBoxVille.getSelectedItem()).getCp());
+            } else if (e.getSource() == jButtonValider) {
+                if (!jTextFieldCPChoisi.getText().equals("")) {
+                    Ville ville = (Ville) jComboBoxVille.getSelectedItem();
+                    ((VueAdresse_M5_DesCPs) (this.getVue().getParent())).getjTextFieldCdp().setText(jTextFieldCPChoisi.getText());
+                    ((VueAdresse_M5_DesCPs) (this.getVue().getParent())).getjTextFieldVille().setText(ville.getNom());
+                    ((VueAdresse_M5_DesCPs) (this.getVue().getParent())).setVilleCourante(ville);
+                    this.getVue().dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this.getVue(), "Vous devez saisir le début d'un code postal existant ou Annuler");
+                    this.getVue().jTextFieldCP.requestFocus();
+                }
+            } else if (e.getSource() == jButtonAnnuler) {
+                    this.getVue().dispose();                
+            
             }
         }
 
@@ -284,10 +306,22 @@ public class VueChoixVilleApproxDesCPs extends javax.swing.JDialog {
                 jTextFieldCPChoisi.setText((String) jListCPs.getSelectedValue());
             }
         }
+        
+        public VueChoixVilleApproxDesCPs getVue() {
+            return vue;
+        }
 
+        public void setVue(VueChoixVilleApproxDesCPs vue) {
+            this.vue = vue;
+        }
+
+        public Ecouteur(VueChoixVilleApproxDesCPs vue) {
+            this.vue = vue;
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAnnuler;
     private javax.swing.JButton jButtonValider;
     private javax.swing.JComboBox jComboBoxVille;
     private javax.swing.JLabel jLabel1;
