@@ -86,7 +86,7 @@ public class VueAdresse_M2 extends javax.swing.JFrame {
         jButtonRechercher.setEnabled(true);
         jButtonAnnuler.setEnabled(false);
         jButtonValider.setEnabled(false);
-                jButtonPrecedent.setEnabled(true);
+        jButtonPrecedent.setEnabled(true);
         jButtonSuivant.setEnabled(true);
     }
 
@@ -412,8 +412,8 @@ public class VueAdresse_M2 extends javax.swing.JFrame {
         Adresse cetteAdresse = null;
         if (!jTextFieldId.getText().equals("")) {
             try {
-            int idAdresse = Integer.valueOf(jTextFieldId.getText());
-            int indice = lesAdresses.indexOf(new Adresse(idAdresse, null, null, null));
+                int idAdresse = Integer.valueOf(jTextFieldId.getText());
+                int indice = lesAdresses.indexOf(new Adresse(idAdresse, null, null, null));
                 if (indice != -1) {
                     indiceAdresseCourante = indice;
                     adresseCourante = lesAdresses.get(indiceAdresseCourante);
@@ -447,6 +447,7 @@ public class VueAdresse_M2 extends javax.swing.JFrame {
         try {
             Jdbc.getInstance().connecter();
             DaoAdresse.update(idAdresse, cetteAdresse);
+            lesAdresses = DaoAdresse.selectAll();
             JOptionPane.showMessageDialog(this, "Modification effectuée");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Echec de la mise à jour de la base de données");
@@ -585,7 +586,7 @@ public class VueAdresse_M2 extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
- 
+
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
