@@ -487,6 +487,7 @@ public class VueAdresse_M3 extends javax.swing.JFrame {
         try {
             Jdbc.getInstance().connecter();
             DaoAdresse.update(idAdresse, cetteAdresse);
+            lesAdresses = DaoAdresse.selectAll();
             JOptionPane.showMessageDialog(this, "Modification effectuée");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Echec de la mise à jour de la base de données");
