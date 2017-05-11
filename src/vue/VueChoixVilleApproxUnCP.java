@@ -243,12 +243,15 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
             if (e.getSource() == jComboBoxVille) {
                 jTextFieldCPChoisi.setText(((Ville) jComboBoxVille.getSelectedItem()).getCp());
             } else if (e.getSource() == jButtonValider) {
-                if (jTextFieldCPChoisi.getText() != "") {
+                if (!jTextFieldCPChoisi.getText().equals("")) {
                     Ville ville = (Ville) jComboBoxVille.getSelectedItem();
                     ((VueAdresse_M5_UnCP) (this.getVue().getParent())).getjTextFieldCdp().setText(jTextFieldCPChoisi.getText());
                     ((VueAdresse_M5_UnCP) (this.getVue().getParent())).getjTextFieldVille().setText(ville.getNom());
                     ((VueAdresse_M5_UnCP) (this.getVue().getParent())).setVilleCourante(ville);
                     this.getVue().dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this.getVue(), "Vous devez saisir le début d'un code postal existant ou Annuler");
+                    this.getVue().jTextFieldCP.requestFocus();
                 }
             } else if (e.getSource() == jButtonAnnuler) {
                     this.getVue().dispose();                
