@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import modele.dao.DaoAdresse;
 import modele.dao.DaoAdresse2;
 import modele.dao.Jdbc;
 import modele.metier.Adresse2;
@@ -358,7 +359,7 @@ public class VueAdresse_M5_DesCPs extends javax.swing.JFrame {
 
         jCheckBoxTriDecroissant.setText("Tri décroissant");
 
-        jButtonChoisirVille.setText("Choisir ville");
+        jButtonChoisirVille.setText("Modifier ville");
         jButtonChoisirVille.setEnabled(false);
         jButtonChoisirVille.setNextFocusableComponent(jButtonValider);
 
@@ -493,6 +494,7 @@ public class VueAdresse_M5_DesCPs extends javax.swing.JFrame {
         try {
             Jdbc.getInstance().connecter();
             DaoAdresse2.update(idAdresse, cetteAdresse);
+            lesAdresses = DaoAdresse2.selectAll();
             JOptionPane.showMessageDialog(this, "Modification effectuée");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Echec de la mise à jour de la base de données");

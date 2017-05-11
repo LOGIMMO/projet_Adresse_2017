@@ -356,7 +356,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButtonChoisirVille">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Choisir ville"/>
+        <Property name="text" type="java.lang.String" value="Modifier ville"/>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="jButtonValider"/>
