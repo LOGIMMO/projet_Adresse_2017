@@ -459,6 +459,7 @@ public class VueAdresse_M2 extends javax.swing.JFrame {
         try {
             Jdbc.getInstance().connecter();
             DaoAdresse.update(idAdresse, cetteAdresse);
+            lesAdresses = DaoAdresse.selectAll();
             JOptionPane.showMessageDialog(this, "Modification effectuée");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Echec de la mise à jour de la base de données");
@@ -613,7 +614,7 @@ public class VueAdresse_M2 extends javax.swing.JFrame {
      * de l'interface KeyListener, ie les méthodes keyTyped, keyPressed et
      * keyReleased
      */
-    private class Ecouteur implements ActionListener{
+    private class Ecouteur implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
