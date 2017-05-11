@@ -26,7 +26,7 @@ import modele.metier.Ville;
  *
  * @author btssio
  */
-public class VueAdresse_M5_UnCP extends javax.swing.JFrame {
+public class VueAdresse_M5_DesCP extends javax.swing.JFrame {
 
     private int etat; // 1 affichage, 2 ajout, 3 suppression, 4 modification, 
     // 5 recherche, possibilité d'utiliser enum
@@ -44,7 +44,7 @@ public class VueAdresse_M5_UnCP extends javax.swing.JFrame {
     /**
      * Creates new form VueAdresse
      */
-    public VueAdresse_M5_UnCP() {
+    public VueAdresse_M5_DesCP() {
         // initialisation des composants grahiques de l'interface
         initComponents();
         jTextFieldCdp.setSize(4, 19);
@@ -637,14 +637,22 @@ public class VueAdresse_M5_UnCP extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M5_UnCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M5_UnCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M5_UnCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VueAdresse_M5_UnCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VueAdresse_M5_DesCP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -657,7 +665,7 @@ public class VueAdresse_M5_UnCP extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VueAdresse_M5_UnCP().setVisible(true);
+                new VueAdresse_M5_DesCP().setVisible(true);
             }
         });
     }
@@ -670,7 +678,7 @@ public class VueAdresse_M5_UnCP extends javax.swing.JFrame {
      */
     private class Ecouteur implements ActionListener, KeyListener {
 
-        private VueAdresse_M5_UnCP vue;
+        private VueAdresse_M5_DesCP vue;
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -768,15 +776,15 @@ public class VueAdresse_M5_UnCP extends javax.swing.JFrame {
         public void keyReleased(KeyEvent e) {
         }
 
-        public Ecouteur(VueAdresse_M5_UnCP vue) {
+        public Ecouteur(VueAdresse_M5_DesCP vue) {
             this.vue = vue;
         }
 
-        public VueAdresse_M5_UnCP getVue() {
+        public VueAdresse_M5_DesCP getVue() {
             return vue;
         }
 
-        public void setVue(VueAdresse_M5_UnCP vue) {
+        public void setVue(VueAdresse_M5_DesCP vue) {
             this.vue = vue;
         }
 

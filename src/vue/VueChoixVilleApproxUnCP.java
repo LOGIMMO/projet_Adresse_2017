@@ -245,9 +245,9 @@ public class VueChoixVilleApproxUnCP extends javax.swing.JDialog {
             } else if (e.getSource() == jButtonValider) {
                 if (!jTextFieldCPChoisi.getText().equals("")) {
                     Ville ville = (Ville) jComboBoxVille.getSelectedItem();
-                    ((VueAdresse_M5_UnCP) (this.getVue().getParent())).getjTextFieldCdp().setText(jTextFieldCPChoisi.getText());
-                    ((VueAdresse_M5_UnCP) (this.getVue().getParent())).getjTextFieldVille().setText(ville.getNom());
-                    ((VueAdresse_M5_UnCP) (this.getVue().getParent())).setVilleCourante(ville);
+                    ((VueAdresse_M5_DesCP) (this.getVue().getParent())).getjTextFieldCdp().setText(jTextFieldCPChoisi.getText());
+                    ((VueAdresse_M5_DesCP) (this.getVue().getParent())).getjTextFieldVille().setText(ville.getNom());
+                    ((VueAdresse_M5_DesCP) (this.getVue().getParent())).setVilleCourante(ville);
                     this.getVue().dispose();
                 } else {
                     JOptionPane.showMessageDialog(this.getVue(), "Vous devez saisir le début d'un code postal existant ou Annuler");
